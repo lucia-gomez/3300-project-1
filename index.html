@@ -1,0 +1,157 @@
+<html>
+
+<head>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    svg {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Total number of vaccinations per country</p>
+  <svg id="total" height=500 width=500></svg>
+
+  <p>Percent of vaccinated population </p>
+  <svg id="per100" height=500 width=500></svg>
+
+  <p>Daily vaccinations per million people</p>
+  <svg id="daily" height=500 width=500></svg>
+  <script>
+
+    // a list of all the keys used in the GDP dataset
+    // the dataset contains historical data for 1960-2020, but not all countries
+    // have data for the most recent years
+    const gdpYears = [];
+    for (let i = 2020; i >= 1960; i--) {
+      gdpYears.push(i);
+    }
+    console.log(gdpYears);
+
+    const svg1 = d3.select("svg#total");
+    const svg2 = d3.select("svg#per100");
+    const svg3 = d3.select("svg#daily");
+
+    // load 2 files at once, and go to the .then function when they're both loaded
+    Promise.all([
+      d3.csv("country_vaccinations.csv"),
+      d3.csv("country_gdp.csv")
+    ]).then(files => {
+
+      const vaxData = files[0];
+      const gdpData = files[1];
+
+      vaxData.forEach(d => {
+        d.people_vaccinated_per_hundred = Number(d.people_vaccinated_per_hundred);
+        d.total_vaccinations = Number(d.total_vaccinations);
+        d.daily_vaccinations_per_million = Number(d.daily_vaccinations_per_million);
+      });
+
+      const countries = [... new Set(vaxData.map(d => d.country))];
+      console.log("Number of countries", countries.length);
+
+      const dates = d3.extent(vaxData, d => d.date);
+      console.log("Oldest and most recent date", dates);
+
+      // ignore countries that haven't been updated in a month?
+      const recentDates = vaxData.filter(d => d.date >= "2021-02-15");
+      const countriesWithRecentDates = [... new Set(recentDates.map(d => d.country))];
+      console.log("Countries with recent data", countriesWithRecentDates.length);
+
+      // get most recent vax data for each country, since there's data for each day
+      const recentData = countriesWithRecentDates.map(country => {
+        const countryData = vaxData.filter(d => d.country === country);
+        countryData.sort((a, b) => b.date.localeCompare(a.date));
+        return countryData[0];
+      });
+      console.log("Most recent data for each country", recentData);
+
+      const vaxxed = recentData.map(d => d.people_vaccinated_per_hundred);
+      console.log("Percent vaccinated", vaxxed.sort((a, b) => a - b));
+
+      // -----------------------------------------
+
+      gdpData.forEach(d => {
+        gdpYears.forEach(year => {
+          d[year] = Number(d[year]);
+        })
+      })
+
+      // get most recent GDP data for each country
+      // store in dict of COUNTRY CODE => GDP
+      // allows for easy look-up later when iterating thru vax data
+      const recentGDP = {};
+      gdpData.forEach(d => {
+        for (let year of gdpYears) {
+          if (d[year] !== 0) {
+            recentGDP[d['Country Code']] = d[year];
+            break;
+          }
+        }
+      });
+
+      console.log("Most recent GDP data", recentGDP);
+
+      // can't use d3.extent for GDP data since it's now stored in a dict/object
+      const minGDP = Math.min(...Object.values(recentGDP));
+      const maxGDP = Math.max(...Object.values(recentGDP));
+      const gdpExtent = [minGDP, maxGDP];
+      console.log("GDP extent", gdpExtent);
+
+      const vaxExtent = d3.extent(recentData, d => d.total_vaccinations);
+      console.log(vaxExtent);
+
+      const gdpScale = d3.scaleLog().domain(gdpExtent).range([10, 490]);
+      const vaxScale = d3.scaleLog().domain(vaxExtent).range([490, 10]);
+
+      console.log(recentData);
+
+      recentData.forEach(d => {
+        svg1.append("circle")
+          .attr("fill", "steelblue")
+          .attr("r", 5)
+          .attr("opacity", 0.8)
+          .attr("cx", gdpScale(recentGDP[d.iso_code]))
+          .attr("cy", vaxScale(d.total_vaccinations))
+          .attr("country", d.country)
+          .attr("gdp", recentGDP[d.iso_code])
+          .attr("vax", d.total_vaccinations)
+      });
+
+      const vaxPer100Extent = d3.extent(recentData, d => d.people_vaccinated_per_hundred);
+      const vaxPer100Scale = d3.scaleSymlog().domain(vaxPer100Extent).range([490, 10]);
+
+      recentData.forEach(d => {
+        svg2.append("circle")
+          .attr("fill", "steelblue")
+          .attr("r", 5)
+          .attr("opacity", 0.8)
+          .attr("cx", gdpScale(recentGDP[d.iso_code]))
+          .attr("cy", vaxPer100Scale(d.people_vaccinated_per_hundred))
+          .attr("country", d.country)
+          .attr("gdp", recentGDP[d.iso_code])
+          .attr("vax", d.people_vaccinated_per_hundred)
+      });
+
+      const vaxDailyExtent = d3.extent(recentData, d => d.daily_vaccinations_per_million);
+      const vaxDailyScale = d3.scaleSymlog().domain(vaxDailyExtent).range([490, 10]);
+
+      recentData.forEach(d => {
+        svg3.append("circle")
+          .attr("fill", "steelblue")
+          .attr("r", 5)
+          .attr("opacity", 0.8)
+          .attr("cx", gdpScale(recentGDP[d.iso_code]))
+          .attr("cy", vaxDailyScale(d.daily_vaccinations_per_million))
+          .attr("country", d.country)
+          .attr("gdp", recentGDP[d.iso_code])
+          .attr("vax", d.daily_vaccinations_per_million)
+      });
+
+    })
+
+  </script>
+</body>
+
+</html>
