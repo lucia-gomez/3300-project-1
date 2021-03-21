@@ -3,6 +3,14 @@
 <head>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <style>
+    .gridlines line {
+      stroke: lightgrey;
+    }
+    
+    .gridlines .domain {
+      stroke: none;
+    }
+
     svg {
       border: 1px solid black;
     }
@@ -10,6 +18,85 @@
 </head>
 
 <body>
+  <div>
+  <p>Vacination Progress of High GDP Countries over Time</p>
+  <p>Vacinations per Hundred vs. Time</p>
+  <svg id="lineplot" width="800" height="500" style="border:2px solid grey; margin:20px;"></svg>
+
+  <script>
+    d3.csv("country_vaccinations.csv", d3.autoType).then( (data) => {
+
+      console.log("Country Vacination Data");
+      console.log(data);
+
+
+      // Scales and Axises
+
+      const svg = d3.select("svg#lineplot");
+      const width = svg.attr("width");
+      const height = svg.attr("height");
+      const margin = {top: 20, right: 20, bottom: 50, left: 50};
+      const chartWidth = width - margin.left - margin.right;
+      const chartHeight = height - margin.top - margin.bottom;
+
+      const dateExtent = d3.extent(data, d => d.date);
+      const dateScale = d3.scaleTime().domain(dateExtent).range([0, chartWidth]);
+
+      // const vaxExtent = d3.extent(data, d => d['total_vaccinations_per_hundred']);
+      const vaxScale = d3.scaleLinear().domain([0,40]).range([chartHeight, 0]);
+
+      console.log(dateExtent);
+      // console.log(vaxExtent);
+
+      let vaxAxis = d3.axisLeft(vaxScale);
+      let vaxGridlines = d3.axisLeft(vaxScale)
+                  .tickSize(-chartWidth-15)
+                  .tickFormat("");
+
+      let ticks = svg.append("g").attr("id","ticks");
+
+      ticks.append("g")
+          .attr("class", "yAxis")
+          .attr("transform","translate("+(margin.left-15)+","+(margin.top+5)+")")
+          .call(vaxAxis);
+
+      ticks.append("g")
+          .attr("class", "gridlines")
+          .attr("transform","translate("+(margin.left-15)+","+(margin.top+5)+")")
+          .call(vaxGridlines);
+
+      let dateAxis = d3.axisBottom(dateScale)
+                      .tickFormat(d3.timeFormat("%m/%d/%Y"));
+      // Maybe pick a nicer format than this?
+      let dateGridlines = d3.axisBottom(dateScale)
+                  .tickSize(-chartHeight-5)
+                  .tickFormat("");
+
+      ticks.append("g")
+        .attr("class", "xAxis")
+        .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
+        .call(dateAxis);
+
+      ticks.append("g")
+          .attr("class", "gridlines")
+          .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
+          .call(dateGridlines);
+
+
+
+    });
+  </script>
+
+
+
+
+
+
+
+  </div>
+
+
+
   <p>Total number of vaccinations per country</p>
   <svg id="total" height=500 width=500></svg>
 
