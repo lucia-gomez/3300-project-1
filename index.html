@@ -1,12 +1,12 @@
 <html>
-
+<!-- testing -->
 <head>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <style>
     .gridlines line {
       stroke: lightgrey;
     }
-    
+
     .gridlines .domain {
       stroke: none;
     }
@@ -18,7 +18,7 @@
 </head>
 
 <body>
-  
+
   <div>
   <p>Vacination Progress of Countries over Time</p>
   <p>Vacinations per Hundred vs. Time</p>
@@ -84,7 +84,7 @@
           .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
           .call(dateGridlines);
 
-      // Create lines 
+      // Create lines
 
       var pathGenerator = d3.line()
                             .x(d => dateScale(d['date']))
@@ -102,8 +102,8 @@
 
     function makeLine(data, pathGenerator, country, linecolor, circlecolor, dateScale, vaxScale) {
 
-      let countryData =  data.filter( (d) => { 
-        return d.country == country && d['total_vaccinations_per_hundred'] !== null; }); 
+      let countryData =  data.filter( (d) => {
+        return d.country == country && d['total_vaccinations_per_hundred'] !== null; });
 
       chartArea.append("path").datum(countryData)
                       .attr("fill", "none")
@@ -112,7 +112,7 @@
                       .attr("d", pathGenerator);
 
       countryData.forEach( (d) => {
-        
+
         chartArea.append("circle")
                 .attr("r", 3)
                 .attr("fill", circlecolor)
