@@ -11,6 +11,10 @@
       stroke: none;
     }
 
+    .titles {
+      stroke: pink
+    }
+
     svg {
       border: 1px solid black;
     }
@@ -54,6 +58,13 @@
       let vaxGridlines = d3.axisLeft(vaxScale)
                   .tickSize(-chartWidth-15)
                   .tickFormat("");
+      // add titles and axis labels
+      svg.append("text").text('time').attr('x', chartWidth/2).attr('y', chartHeight+60).attr('class', 'titles');
+
+      svg.append("text").text('country').attr('x', - chartHeight/2).attr('y', 10).attr('transform', 'rotate(-90)');;
+
+
+
 
       let ticks = svg.append("g").attr("id","ticks");
 
