@@ -66,9 +66,6 @@
 
       svg.append("text").text('Vaccinations per one hundred people over time').attr('x', chartWidth/2).attr('y', 20).attr('class', 'titles').attr('text-anchor', 'middle');
 
-
-
-
       let ticks = svg.append("g").attr("id","ticks");
 
       ticks.append("g")
@@ -127,11 +124,28 @@
 
       countryData.forEach( (d) => {
 
-        chartArea.append("circle")
+        let circle = chartArea.append("circle")
                 .attr("r", 3)
                 .attr("fill", circlecolor)
                 .attr("cx", dateScale(d['date']) )
                 .attr("cy", vaxScale(d['total_vaccinations_per_hundred']) );
+
+        circle.on("mouseover", function() {
+          d3.select(this)
+          .transition().duration(200)
+          .attr("r", 6)
+          .attr('text', d['country'])
+          svg.append('text').text(d['country']+ ": " + d['total_vaccinations'])
+          .attr('x', dateScale(d['date']))
+          .attr('y', vaxScale(d['total_vaccinations_per_hundred']))
+          .attr('id', 'texttitle')
+        });
+        circle.on("mouseout", function() {
+          d3.select(this)
+          .transition().duration(200)
+          .attr("r", 3);
+          d3.selectAll('#texttitle').remove();
+        });
 
       });
 
