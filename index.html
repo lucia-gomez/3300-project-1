@@ -12,7 +12,7 @@
     }
 
     .titles {
-      stroke: pink
+      stroke: darkblue
     }
 
     svg {
@@ -58,10 +58,13 @@
       let vaxGridlines = d3.axisLeft(vaxScale)
                   .tickSize(-chartWidth-15)
                   .tickFormat("");
-      // add titles and axis labels
-      svg.append("text").text('time').attr('x', chartWidth/2).attr('y', chartHeight+60).attr('class', 'titles');
 
-      svg.append("text").text('country').attr('x', - chartHeight/2).attr('y', 10).attr('transform', 'rotate(-90)');;
+      // add titles and axis labels
+      svg.append("text").text('Time').attr('x', chartWidth/2).attr('y', chartHeight+60).attr('class', 'titles').attr('text-anchor', 'middle');
+
+      svg.append("text").text('Vaccinations per one hundred people').attr('x', - chartHeight/2).attr('y', 10).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
+
+      svg.append("text").text('Vaccinations per one hundred people over time').attr('x', chartWidth/2).attr('y', 20).attr('class', 'titles').attr('text-anchor', 'middle');
 
 
 
