@@ -66,6 +66,14 @@
 
       svg.append("text").text('Vaccinations per one hundred people over time').attr('x', chartWidth/2).attr('y', 20).attr('class', 'titles').attr('text-anchor', 'middle');
 
+      svg.append("text").text('United Kingdom').attr('x', 650).attr('y', 70).attr('text-anchor', 'middle').attr('stroke','orange');
+
+      svg.append("text").text('United States').attr('x', 720).attr('y', 225).attr('text-anchor', 'middle').attr('stroke','blue');
+
+      svg.append("text").text('Denmark').attr('x', 700).attr('y', 305).attr('text-anchor', 'middle').attr('stroke','red');
+
+      svg.append("text").text('Italy').attr('x', 750).attr('y', 375).attr('text-anchor', 'middle').attr('stroke','green');
+
       let ticks = svg.append("g").attr("id","ticks");
 
       ticks.append("g")
@@ -130,26 +138,10 @@
                 .attr("cx", dateScale(d['date']) )
                 .attr("cy", vaxScale(d['total_vaccinations_per_hundred']) );
 
-        circle.on("mouseover", function() {
-          d3.select(this)
-          .transition().duration(200)
-          .attr("r", 6)
-          .attr('text', d['country'])
-          svg.append('text').text(d['country']+ ": " + d['total_vaccinations'])
-          .attr('x', dateScale(d['date']))
-          .attr('y', vaxScale(d['total_vaccinations_per_hundred']))
-          .attr('id', 'texttitle')
-        });
-        circle.on("mouseout", function() {
-          d3.select(this)
-          .transition().duration(200)
-          .attr("r", 3);
-          d3.selectAll('#texttitle').remove();
-        });
-
       });
 
     }
+
   </script>
 
   </div>
