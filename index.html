@@ -87,7 +87,7 @@
 
       let dateAxis = d3.axisBottom(dateScale)
                       .tickFormat(d3.timeFormat("%m/%d"));
-      // Maybe pick a nicer format than this?
+      
       let dateGridlines = d3.axisBottom(dateScale)
                   .tickSize(-chartHeight-5)
                   .tickFormat("");
@@ -116,6 +116,9 @@
       makeLine(data, pathGenerator, "Hungary", colors[4], colors[5], dateScale, vaxScale);
       makeLine(data, pathGenerator, "United Kingdom", colors[6], colors[7], dateScale, vaxScale);
       makeLine(data, pathGenerator, "Israel", colors[8], colors[9], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Seychelles", colors[10], "goldenrod", dateScale, vaxScale);
+
+      chartArea.raise();
 
     });
 
@@ -125,6 +128,7 @@
         return d.country == country && d['people_vaccinated_per_hundred'] !== null; });
 
       chartArea.append("path").datum(countryData)
+                      .attr("class", "line")
                       .attr("fill", "none")
                       .attr("stroke", linecolor)
                       .attr("stroke-width", 3)
