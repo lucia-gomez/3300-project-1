@@ -34,7 +34,7 @@
     const svg = d3.select("svg#lineplot");
     const width = svg.attr("width");
     const height = svg.attr("height");
-    const margin = {top: 20, right: 20, bottom: 50, left: 50};
+    const margin = {top: 20, right: 20, bottom: 70, left: 70};
     const chartWidth = width - margin.left - margin.right;
     const chartHeight = height - margin.top - margin.bottom;
     let chartArea = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
@@ -47,9 +47,8 @@
       const dateExtent = d3.extent(data, d => d.date);
       const dateScale = d3.scaleTime().domain(dateExtent).range([0, chartWidth]);
 
-      // Hard Coded Vax per Hundred axis, will explain later
       // const vaxExtent = d3.extent(data, d => d['total_vaccinations_per_hundred']);
-      const vaxScale = d3.scaleLinear().domain([0,40]).range([chartHeight, 0]);
+      const vaxScale = d3.scaleLinear().domain([0,75]).range([chartHeight, 0]);
 
       console.log(dateExtent);
       // console.log(vaxExtent);
@@ -60,11 +59,11 @@
                   .tickFormat("");
 
       // add titles and axis labels
-      svg.append("text").text('Time').attr('x', chartWidth/2).attr('y', chartHeight+60).attr('class', 'titles').attr('text-anchor', 'middle');
+      svg.append("text").text('Date').attr('x', chartWidth/2).attr('y', chartHeight+60).attr('class', 'titles').attr('text-anchor', 'middle');
 
-      svg.append("text").text('Vaccinations per one hundred people').attr('x', - chartHeight/2).attr('y', 10).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
+      svg.append("text").text('Percentage of People Vaccinated').attr('x', - chartHeight/2).attr('y', 10).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
 
-      svg.append("text").text('Vaccinations per one hundred people over time').attr('x', chartWidth/2).attr('y', 20).attr('class', 'titles').attr('text-anchor', 'middle');
+      svg.append("text").text('Percentage of People Vaccinated vs. Time').attr('x', chartWidth/2).attr('y', 20).attr('class', 'titles').attr('text-anchor', 'middle');
 
       svg.append("text").text('United Kingdom').attr('x', 650).attr('y', 70).attr('text-anchor', 'middle').attr('stroke','orange');
 
@@ -87,8 +86,8 @@
           .call(vaxGridlines);
 
       let dateAxis = d3.axisBottom(dateScale)
-                      .tickFormat(d3.timeFormat("%m/%d/%Y"));
-      // Maybe pick a nicer format than this?
+                      .tickFormat(d3.timeFormat("%m/%d"));
+      
       let dateGridlines = d3.axisBottom(dateScale)
                   .tickSize(-chartHeight-5)
                   .tickFormat("");
@@ -107,24 +106,29 @@
 
       var pathGenerator = d3.line()
                             .x(d => dateScale(d['date']))
-                            .y(d => vaxScale(d['total_vaccinations_per_hundred']))
+                            .y(d => vaxScale(d['people_vaccinated_per_hundred']))
                             .curve(d3.curveMonotoneX);
 
       const colors = d3.schemePaired;
 
       makeLine(data, pathGenerator, "United States", colors[0], colors[1], dateScale, vaxScale);
       makeLine(data, pathGenerator, "Italy", colors[2], colors[3], dateScale, vaxScale);
-      makeLine(data, pathGenerator, "Denmark", colors[4], colors[5], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Hungary", colors[4], colors[5], dateScale, vaxScale);
       makeLine(data, pathGenerator, "United Kingdom", colors[6], colors[7], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Israel", colors[8], colors[9], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Seychelles", colors[10], "goldenrod", dateScale, vaxScale);
+
+      chartArea.raise();
 
     });
 
     function makeLine(data, pathGenerator, country, linecolor, circlecolor, dateScale, vaxScale) {
 
       let countryData =  data.filter( (d) => {
-        return d.country == country && d['total_vaccinations_per_hundred'] !== null; });
+        return d.country == country && d['people_vaccinated_per_hundred'] !== null; });
 
       chartArea.append("path").datum(countryData)
+                      .attr("class", "line")
                       .attr("fill", "none")
                       .attr("stroke", linecolor)
                       .attr("stroke-width", 3)
@@ -136,7 +140,7 @@
                 .attr("r", 3)
                 .attr("fill", circlecolor)
                 .attr("cx", dateScale(d['date']) )
-                .attr("cy", vaxScale(d['total_vaccinations_per_hundred']) );
+                .attr("cy", vaxScale(d['people_vaccinated_per_hundred']) );
 
       });
 
