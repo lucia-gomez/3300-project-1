@@ -15,16 +15,13 @@
       fill: black
     }
 
-    svg {
-      border: 1px solid black;
-    }
   </style>
 </head>
 
 <body>
 
   <h3> Graph 1: Visualizing the percent of population vaccinated for countries of varying GDPs</h3>
-  <p> This graph explores how the GDP of a country impacts its vaccincation progress as a percent of total population. Several countires are highlighted with their flag to show a variation among countires with high and low GDPs. We want to see if high-GDP countries have a greater percentage of their populaiton vaccinated and if lower-GDP countires have a smaller percentage of their population vaccinated.  </p>
+  <p> This graph explores how the GDP of a country impacts its vaccincation progress as a percent of total population. Several countires are highlighted with their flag to show a variation among countries with high and low GDPs. We want to see if high-GDP countries have a greater percentage of their populaiton vaccinated and if lower-GDP countires have a smaller percentage of their population vaccinated.  </p>
 
   <svg id="per100" height=600 width=800 style="border:2px solid black; margin:20px;"></svg>
 
@@ -206,10 +203,10 @@
 
   <div>
 
-  <h3> Graph 2: Visualizing the vaccination progress of selected counties from December 2020 to March 2021</h3>
-  <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs, Hungary and Israel have relatively lower GDPs, and Seychelles has a significantly lower GDP. This linegraph expands on their vaccination progress from December 13th, 2020 to March 7th, 2020 to show surprising trends in vaccination progress over the last four months among counties with high and low GDPs. </p>
+  <h3> Graph 2: Visualizing the vaccination progress of selected countries from December 2020 to March 2021</h3>
+  <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs, Hungary and Israel have relatively lower GDPs, and Seychelles has a significantly lower GDP. This linegraph expands on their vaccination progress from December 13th, 2020 to March 7th, 2021 to show surprising trends in vaccination progress over the last four months among countries with high and low GDPs. </p>
 
-  <svg id="lineplot" width="800" height="500" style="border:2px solid black; margin:20px;"></svg>
+  <svg id="lineplot" width="800" height="500" style="margin:20px;"></svg>
 
   <script>
     // Scales and Axises
@@ -297,15 +294,15 @@
 
       svg.append("text").text('Seychelles').attr('x', 760).attr('y', 80).attr('text-anchor', 'middle').attr('fill','goldenrod');
 
-      svg.append("text").text('Israel').attr('x', 780).attr('y', 130).attr('text-anchor', 'middle').attr('fill','purple');
+      svg.append("text").text('Israel').attr('x', 780).attr('y', 130).attr('text-anchor', 'middle').attr('fill', colors[9]);
 
-      svg.append("text").text('United Kingdom').attr('x', 740).attr('y', 230).attr('text-anchor', 'middle').attr('fill','orange');
+      svg.append("text").text('United Kingdom').attr('x', 740).attr('y', 230).attr('text-anchor', 'middle').attr('fill', colors[7]);
 
-      svg.append("text").text('United States').attr('x', 750).attr('y', 310).attr('text-anchor', 'middle').attr('fill','blue');
+      svg.append("text").text('United States').attr('x', 750).attr('y', 310).attr('text-anchor', 'middle').attr('fill', colors[1]);
 
-      svg.append("text").text('Hungary').attr('x', 770).attr('y', 347).attr('text-anchor', 'middle').attr('fill','red');
+      svg.append("text").text('Hungary').attr('x', 770).attr('y', 347).attr('text-anchor', 'middle').attr('fill', colors[5]);
 
-      svg.append("text").text('Italy').attr('x', 780).attr('y', 410).attr('text-anchor', 'middle').attr('fill','green');
+      svg.append("text").text('Italy').attr('x', 780).attr('y', 410).attr('text-anchor', 'middle').attr('fill', colors[3]);
 
     });
 
@@ -319,6 +316,7 @@
                       .attr("fill", "none")
                       .attr("stroke", linecolor)
                       .attr("stroke-width", 3)
+                      .attr("opacity", 0.9)
                       .attr("d", pathGenerator);
 
       countryData.forEach( (d) => {
@@ -326,6 +324,7 @@
         let circle = chartArea.append("circle")
                 .attr("r", 3)
                 .attr("fill", circlecolor)
+                .attr("opacity", 0.9)
                 .attr("cx", dateScale(d['date']) )
                 .attr("cy", vaxScale(d['people_vaccinated_per_hundred']) );
 
