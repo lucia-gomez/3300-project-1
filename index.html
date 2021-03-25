@@ -190,7 +190,11 @@
 
       // get flag icons for these countries
       // the source files use the ISO-2 country codes, but the dataset uses ISO-3
-      const countries = ["USA", "SYC", "GBR", "ITA", "ISR", "HUN"];
+      const countries = [
+        "USA", "SYC", "GBR", "ITA", "ISR", "HUN", "JPN", "CHN",
+        "CHL", "DMA", "BLZ", "PRY", "MYS", "IND", "DEU", "BGD",
+        "RWA", "GHA", "HRV", "VEN", "ISL", "GUY", "BMU", "NOR",
+      ];
       const countryCodesToFlags = {};
       countries.forEach(c => {
         countryCodesToFlags[c] = `https://hatscripts.github.io/circle-flags/flags/${countryCodes[c].toLowerCase()}.svg`;
@@ -299,6 +303,7 @@
             .attr("border", "black")
             .attr("stroke-width", 1)
             .attr("width", 30)
+            .attr("iso", d.iso_code)
             .attr("x", gdpScale(recentGDP[d.iso_code]) - 15)
             .attr("y", vaxPercentScale(d.people_vaccinated_per_hundred) - 15)
           chartAreaScatter.append("circle")
@@ -312,12 +317,11 @@
           chartAreaScatter.append("circle")
             .attr("fill", "steelblue")
             .attr("r", 5)
-            .attr("opacity", 0.8)
+            .attr("opacity", 0.3)
             .attr("cx", gdpScale(recentGDP[d.iso_code]))
             .attr("cy", vaxPercentScale(d.people_vaccinated_per_hundred))
             .attr("country", d.country)
-            .attr("gdp", recentGDP[d.iso_code])
-            .attr("vax", d.people_vaccinated_per_hundred);
+            .attr("iso", d.iso_code);
         }
       });
 
