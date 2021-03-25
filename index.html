@@ -177,31 +177,27 @@
       .attr("id", "chartAreaScatter")
       .attr("transform", "translate(" + margins2.left + "," + margins2.top + ")");
 
-    const countryCodesToFlags = {
-      "SYC": "https://hatscripts.github.io/circle-flags/flags/sc.svg", // seychelles
-      "USA": "https://hatscripts.github.io/circle-flags/flags/us.svg", // USA
-      "GBR": "https://hatscripts.github.io/circle-flags/flags/gb.svg", // UK
-      "ITA": "https://hatscripts.github.io/circle-flags/flags/it.svg", // italy
-      "ISR": "https://hatscripts.github.io/circle-flags/flags/il.svg", // israel
-      "HUN": "https://hatscripts.github.io/circle-flags/flags/hu.svg", // hungary
-    };
-
     // load 2 files at once, and go to the .then function when they're both loaded
     Promise.all([
       d3.csv("country_vaccinations.csv"),
-      d3.csv("country_gdp.csv")
+      d3.csv("country_gdp.csv"),
+      d3.json("iso3_to_iso2.json")
     ]).then(files => {
 
       const vaxData = files[0];
       const gdpData = files[1];
+      const countryCodes = files[2];
+
+      const countries = ["USA", "SYC", "GBR", "ITA", "ISR", "HUN"];
+      const countryCodesToFlags = {};
+      countries.forEach(c => {
+        countryCodesToFlags[c] = `https://hatscripts.github.io/circle-flags/flags/${countryCodes[c].toLowerCase()}.svg`;
+      })
 
       // clean vax data
       vaxData.forEach(d => {
         d.people_vaccinated_per_hundred = Number(d.people_vaccinated_per_hundred);
       });
-
-      const countries = [... new Set(vaxData.map(d => d.country))];
-      console.log("Number of countries", countries.length);
 
       const dates = d3.extent(vaxData, d => d.date);
       console.log("Oldest and most recent date", dates);
