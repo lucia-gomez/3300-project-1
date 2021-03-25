@@ -23,139 +23,9 @@
 
 <body>
 
-  <div>
-  <p>Vacination Progress of Countries over Time</p>
-  <p>Vacinations per Hundred vs. Time</p>
+  <h3> Graph 1: Visualizing the percent of population vaccinated for countries of varying GDPs</h3>
+  <p> In this graph,  </p>
 
-  <svg id="lineplot" width="800" height="500" style="border:2px solid black; margin:20px;"></svg>
-
-  <script>
-    // Scales and Axises
-
-    const svg = d3.select("svg#lineplot");
-    const width = svg.attr("width");
-    const height = svg.attr("height");
-    const margin = {top: 20, right: 20, bottom: 70, left: 70};
-    const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.top - margin.bottom;
-    let chartArea = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
-
-    d3.csv("country_vaccinations.csv", d3.autoType).then( (data) => {
-
-      console.log("Country Vacination Data");
-      console.log(data);
-
-      const dateExtent = d3.extent(data, d => d.date);
-      const dateScale = d3.scaleTime().domain(dateExtent).range([0, chartWidth]);
-
-      // const vaxExtent = d3.extent(data, d => d['total_vaccinations_per_hundred']);
-      const vaxScale = d3.scaleLinear().domain([0,75]).range([chartHeight, 0]);
-
-      console.log(dateExtent);
-      // console.log(vaxExtent);
-
-      let vaxAxis = d3.axisLeft(vaxScale);
-      let vaxGridlines = d3.axisLeft(vaxScale)
-                  .tickSize(-chartWidth-15)
-                  .tickFormat("");
-
-      // add titles and axis labels
-      svg.append("text").text('Date').attr('x', chartWidth/2 + 50).attr('y', chartHeight+70).attr('class', 'titles').attr('text-anchor', 'middle');
-
-      svg.append("text").text('Percentage of People Vaccinated').attr('x', - chartHeight/2 - 35).attr('y', 20).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
-
-      svg.append("text").text('Percentage of People Vaccinated vs. Time').attr('x', chartWidth/2 + 50).attr('y', 15).attr('class', 'titles').attr('text-anchor', 'middle');
-
-      svg.append("text").text('Seychelles').attr('x', 760).attr('y', 80).attr('text-anchor', 'middle').attr('fill','goldenrod');
-
-      svg.append("text").text('Israel').attr('x', 780).attr('y', 130).attr('text-anchor', 'middle').attr('fill','purple');
-
-      svg.append("text").text('United Kingdom').attr('x', 740).attr('y', 230).attr('text-anchor', 'middle').attr('fill','orange');
-
-      svg.append("text").text('United States').attr('x', 750).attr('y', 310).attr('text-anchor', 'middle').attr('fill','blue');
-
-      svg.append("text").text('Hungary').attr('x', 770).attr('y', 347).attr('text-anchor', 'middle').attr('fill','red');
-
-      svg.append("text").text('Italy').attr('x', 780).attr('y', 410).attr('text-anchor', 'middle').attr('fill','green');
-
-      let ticks = svg.append("g").attr("id","ticks");
-
-      ticks.append("g")
-          .attr("class", "yAxis")
-          .attr("transform","translate("+(margin.left-15)+","+(margin.top+5)+")")
-          .call(vaxAxis);
-
-      ticks.append("g")
-          .attr("class", "gridlines")
-          .attr("transform","translate("+(margin.left-15)+","+(margin.top+5)+")")
-          .call(vaxGridlines);
-
-      let dateAxis = d3.axisBottom(dateScale)
-                      .tickFormat(d3.timeFormat("%m/%d"));
-
-      let dateGridlines = d3.axisBottom(dateScale)
-                  .tickSize(-chartHeight-5)
-                  .tickFormat("");
-
-      ticks.append("g")
-        .attr("class", "xAxis")
-        .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
-        .call(dateAxis);
-
-      ticks.append("g")
-          .attr("class", "gridlines")
-          .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
-          .call(dateGridlines);
-
-      // Create lines
-
-      var pathGenerator = d3.line()
-                            .x(d => dateScale(d['date']))
-                            .y(d => vaxScale(d['people_vaccinated_per_hundred']))
-                            .curve(d3.curveMonotoneX);
-
-      const colors = d3.schemePaired;
-
-      makeLine(data, pathGenerator, "United States", colors[0], colors[1], dateScale, vaxScale);
-      makeLine(data, pathGenerator, "Italy", colors[2], colors[3], dateScale, vaxScale);
-      makeLine(data, pathGenerator, "Hungary", colors[4], colors[5], dateScale, vaxScale);
-      makeLine(data, pathGenerator, "United Kingdom", colors[6], colors[7], dateScale, vaxScale);
-      makeLine(data, pathGenerator, "Israel", colors[8], colors[9], dateScale, vaxScale);
-      makeLine(data, pathGenerator, "Seychelles", colors[10], "goldenrod", dateScale, vaxScale);
-
-      chartArea.raise();
-
-    });
-
-    function makeLine(data, pathGenerator, country, linecolor, circlecolor, dateScale, vaxScale) {
-
-      let countryData =  data.filter( (d) => {
-        return d.country == country && d['people_vaccinated_per_hundred'] !== null; });
-
-      chartArea.append("path").datum(countryData)
-                      .attr("class", "line")
-                      .attr("fill", "none")
-                      .attr("stroke", linecolor)
-                      .attr("stroke-width", 3)
-                      .attr("d", pathGenerator);
-
-      countryData.forEach( (d) => {
-
-        let circle = chartArea.append("circle")
-                .attr("r", 3)
-                .attr("fill", circlecolor)
-                .attr("cx", dateScale(d['date']) )
-                .attr("cy", vaxScale(d['people_vaccinated_per_hundred']) );
-
-      });
-
-    }
-
-  </script>
-
-  </div>
-
-  <p>Percent of vaccinated population </p>
   <svg id="per100" height=600 width=800></svg>
 
   <script>
@@ -333,6 +203,140 @@
     })
 
   </script>
+
+  <div>
+
+  <h3> Graph 2: Visualizing the vaccination progress of counties from December 2020 to March 2021</h3>
+  <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs, Hungary and Israel have relatively lower GDPs, and Seychelles has a significantly lower GDP. This linegraph expands on their vaccination progress from December 13th, 2020 to March 7th, 2020 to show surprising trends in vaccination progress over the last four months among counties with high and low GDPs. </p>
+
+  <svg id="lineplot" width="800" height="500" style="border:2px solid black; margin:20px;"></svg>
+
+  <script>
+    // Scales and Axises
+
+    const svg = d3.select("svg#lineplot");
+    const width = svg.attr("width");
+    const height = svg.attr("height");
+    const margin = {top: 20, right: 20, bottom: 70, left: 70};
+    const chartWidth = width - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
+    let chartArea = svg.append("g").attr("transform","translate("+margin.left+","+margin.top+")");
+
+    d3.csv("country_vaccinations.csv", d3.autoType).then( (data) => {
+
+      console.log("Country Vacination Data");
+      console.log(data);
+
+      const dateExtent = d3.extent(data, d => d.date);
+      const dateScale = d3.scaleTime().domain(dateExtent).range([0, chartWidth]);
+
+      // const vaxExtent = d3.extent(data, d => d['total_vaccinations_per_hundred']);
+      const vaxScale = d3.scaleLinear().domain([0,75]).range([chartHeight, 0]);
+
+      console.log(dateExtent);
+      // console.log(vaxExtent);
+
+      let vaxAxis = d3.axisLeft(vaxScale);
+      let vaxGridlines = d3.axisLeft(vaxScale)
+                  .tickSize(-chartWidth-15)
+                  .tickFormat("");
+
+      // add titles and axis labels
+      svg.append("text").text('Date').attr('x', chartWidth/2 + 50).attr('y', chartHeight+70).attr('class', 'titles').attr('text-anchor', 'middle');
+
+      svg.append("text").text('Percentage of Population Vaccinated').attr('x', - chartHeight/2 - 35).attr('y', 20).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
+
+      svg.append("text").text('Percentage of Population Vaccinated From December 2020 to March 2021').attr('x', chartWidth/2 + 50).attr('y', 15).attr('class', 'titles').attr('text-anchor', 'middle');
+
+      svg.append("text").text('Seychelles').attr('x', 760).attr('y', 80).attr('text-anchor', 'middle').attr('fill','goldenrod');
+
+      svg.append("text").text('Israel').attr('x', 780).attr('y', 130).attr('text-anchor', 'middle').attr('fill','purple');
+
+      svg.append("text").text('United Kingdom').attr('x', 740).attr('y', 230).attr('text-anchor', 'middle').attr('fill','orange');
+
+      svg.append("text").text('United States').attr('x', 750).attr('y', 310).attr('text-anchor', 'middle').attr('fill','blue');
+
+      svg.append("text").text('Hungary').attr('x', 770).attr('y', 347).attr('text-anchor', 'middle').attr('fill','red');
+
+      svg.append("text").text('Italy').attr('x', 780).attr('y', 410).attr('text-anchor', 'middle').attr('fill','green');
+
+      let ticks = svg.append("g").attr("id","ticks");
+
+      ticks.append("g")
+          .attr("class", "yAxis")
+          .attr("transform","translate("+(margin.left-15)+","+(margin.top+5)+")")
+          .call(vaxAxis);
+
+      ticks.append("g")
+          .attr("class", "gridlines")
+          .attr("transform","translate("+(margin.left-15)+","+(margin.top+5)+")")
+          .call(vaxGridlines);
+
+      let dateAxis = d3.axisBottom(dateScale)
+                      .tickFormat(d3.timeFormat("%m/%d"));
+
+      let dateGridlines = d3.axisBottom(dateScale)
+                  .tickSize(-chartHeight-5)
+                  .tickFormat("");
+
+      ticks.append("g")
+        .attr("class", "xAxis")
+        .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
+        .call(dateAxis);
+
+      ticks.append("g")
+          .attr("class", "gridlines")
+          .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
+          .call(dateGridlines);
+
+      // Create lines
+
+      var pathGenerator = d3.line()
+                            .x(d => dateScale(d['date']))
+                            .y(d => vaxScale(d['people_vaccinated_per_hundred']))
+                            .curve(d3.curveMonotoneX);
+
+      const colors = d3.schemePaired;
+
+      makeLine(data, pathGenerator, "United States", colors[0], colors[1], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Italy", colors[2], colors[3], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Hungary", colors[4], colors[5], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "United Kingdom", colors[6], colors[7], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Israel", colors[8], colors[9], dateScale, vaxScale);
+      makeLine(data, pathGenerator, "Seychelles", colors[10], "goldenrod", dateScale, vaxScale);
+
+      chartArea.raise();
+
+    });
+
+    function makeLine(data, pathGenerator, country, linecolor, circlecolor, dateScale, vaxScale) {
+
+      let countryData =  data.filter( (d) => {
+        return d.country == country && d['people_vaccinated_per_hundred'] !== null; });
+
+      chartArea.append("path").datum(countryData)
+                      .attr("class", "line")
+                      .attr("fill", "none")
+                      .attr("stroke", linecolor)
+                      .attr("stroke-width", 3)
+                      .attr("d", pathGenerator);
+
+      countryData.forEach( (d) => {
+
+        let circle = chartArea.append("circle")
+                .attr("r", 3)
+                .attr("fill", circlecolor)
+                .attr("cx", dateScale(d['date']) )
+                .attr("cy", vaxScale(d['people_vaccinated_per_hundred']) );
+
+      });
+
+    }
+
+  </script>
+
+  </div>
+
 </body>
 
 </html>
