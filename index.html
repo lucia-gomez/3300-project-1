@@ -12,7 +12,7 @@
     }
 
     .titles {
-      stroke: darkblue
+      fill: black
     }
 
     svg {
@@ -26,7 +26,8 @@
   <div>
   <p>Vacination Progress of Countries over Time</p>
   <p>Vacinations per Hundred vs. Time</p>
-  <svg id="lineplot" width="800" height="500" style="border:2px solid grey; margin:20px;"></svg>
+
+  <svg id="lineplot" width="800" height="500" style="border:2px solid black; margin:20px;"></svg>
 
   <script>
     // Scales and Axises
@@ -59,19 +60,23 @@
                   .tickFormat("");
 
       // add titles and axis labels
-      svg.append("text").text('Date').attr('x', chartWidth/2).attr('y', chartHeight+60).attr('class', 'titles').attr('text-anchor', 'middle');
+      svg.append("text").text('Date').attr('x', chartWidth/2 + 50).attr('y', chartHeight+70).attr('class', 'titles').attr('text-anchor', 'middle');
 
-      svg.append("text").text('Percentage of People Vaccinated').attr('x', - chartHeight/2).attr('y', 10).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
+      svg.append("text").text('Percentage of People Vaccinated').attr('x', - chartHeight/2 - 35).attr('y', 20).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
 
-      svg.append("text").text('Percentage of People Vaccinated vs. Time').attr('x', chartWidth/2).attr('y', 20).attr('class', 'titles').attr('text-anchor', 'middle');
+      svg.append("text").text('Percentage of People Vaccinated vs. Time').attr('x', chartWidth/2 + 50).attr('y', 15).attr('class', 'titles').attr('text-anchor', 'middle');
 
-      svg.append("text").text('United Kingdom').attr('x', 650).attr('y', 70).attr('text-anchor', 'middle').attr('stroke','orange');
+      svg.append("text").text('Seychelles').attr('x', 760).attr('y', 80).attr('text-anchor', 'middle').attr('fill','goldenrod');
 
-      svg.append("text").text('United States').attr('x', 720).attr('y', 225).attr('text-anchor', 'middle').attr('stroke','blue');
+      svg.append("text").text('Israel').attr('x', 780).attr('y', 130).attr('text-anchor', 'middle').attr('fill','purple');
 
-      svg.append("text").text('Denmark').attr('x', 700).attr('y', 305).attr('text-anchor', 'middle').attr('stroke','red');
+      svg.append("text").text('United Kingdom').attr('x', 740).attr('y', 230).attr('text-anchor', 'middle').attr('fill','orange');
 
-      svg.append("text").text('Italy').attr('x', 750).attr('y', 375).attr('text-anchor', 'middle').attr('stroke','green');
+      svg.append("text").text('United States').attr('x', 750).attr('y', 310).attr('text-anchor', 'middle').attr('fill','blue');
+
+      svg.append("text").text('Hungary').attr('x', 770).attr('y', 347).attr('text-anchor', 'middle').attr('fill','red');
+
+      svg.append("text").text('Italy').attr('x', 780).attr('y', 410).attr('text-anchor', 'middle').attr('fill','green');
 
       let ticks = svg.append("g").attr("id","ticks");
 
@@ -87,7 +92,7 @@
 
       let dateAxis = d3.axisBottom(dateScale)
                       .tickFormat(d3.timeFormat("%m/%d"));
-      
+
       let dateGridlines = d3.axisBottom(dateScale)
                   .tickSize(-chartHeight-5)
                   .tickFormat("");
