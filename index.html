@@ -151,7 +151,7 @@
   </div>
 
   <p>Percent of vaccinated population </p>
-  <svg id="per100" height=500 width=500></svg>
+  <svg id="per100" height=600 width=800></svg>
 
   <script>
 
@@ -165,7 +165,7 @@
 
     const scatter = d3.select("svg#per100");
 
-    const margins2 = { "top": 10, "right": 10, "bottom": 30, "left": 30 };
+    const margins2 = { "top": 30, "right": 50, "bottom": 60, "left": 60 };
     const height2 = scatter.attr("height");
     const width2 = scatter.attr("width");
 
@@ -176,6 +176,15 @@
     let chartAreaScatter = scatter.append("g")
       .attr("id", "chartAreaScatter")
       .attr("transform", "translate(" + margins2.left + "," + margins2.top + ")");
+
+    const countryCodesToFlags = {
+      "SYC": "https://hatscripts.github.io/circle-flags/flags/sc.svg", // seychelles
+      "USA": "https://hatscripts.github.io/circle-flags/flags/us.svg", // USA
+      "GBR": "https://hatscripts.github.io/circle-flags/flags/gb.svg", // UK
+      "ITA": "https://hatscripts.github.io/circle-flags/flags/it.svg", // italy
+      "ISR": "https://hatscripts.github.io/circle-flags/flags/il.svg", // israel
+      "HUN": "https://hatscripts.github.io/circle-flags/flags/hu.svg", // hungary
+    };
 
     // load 2 files at once, and go to the .then function when they're both loaded
     Promise.all([
@@ -286,15 +295,32 @@
         .call(verticalGridlines);
 
       recentData.forEach(d => {
-        chartAreaScatter.append("circle")
-          .attr("fill", "steelblue")
-          .attr("r", 5)
-          .attr("opacity", 0.8)
-          .attr("cx", gdpScale(recentGDP[d.iso_code]))
-          .attr("cy", vaxPercentScale(d.people_vaccinated_per_hundred))
-          .attr("country", d.country)
-          .attr("gdp", recentGDP[d.iso_code])
-          .attr("vax", d.people_vaccinated_per_hundred)
+        if (d.iso_code in countryCodesToFlags) {
+          chartAreaScatter.append("svg:image")
+            .attr("xlink:href", countryCodesToFlags[d.iso_code])
+            .attr("border", "black")
+            .attr("stroke-width", 1)
+            .attr("width", 30)
+            .attr("x", gdpScale(recentGDP[d.iso_code]) - 15)
+            .attr("y", vaxPercentScale(d.people_vaccinated_per_hundred) - 15)
+          chartAreaScatter.append("circle")
+            .attr("cx", gdpScale(recentGDP[d.iso_code]))
+            .attr("cy", vaxPercentScale(d.people_vaccinated_per_hundred))
+            .attr("r", 15)
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("stroke-width", 1);
+        } else {
+          chartAreaScatter.append("circle")
+            .attr("fill", "steelblue")
+            .attr("r", 5)
+            .attr("opacity", 0.8)
+            .attr("cx", gdpScale(recentGDP[d.iso_code]))
+            .attr("cy", vaxPercentScale(d.people_vaccinated_per_hundred))
+            .attr("country", d.country)
+            .attr("gdp", recentGDP[d.iso_code])
+            .attr("vax", d.people_vaccinated_per_hundred);
+        }
       });
 
     })
