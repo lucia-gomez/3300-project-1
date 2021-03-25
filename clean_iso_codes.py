@@ -1,5 +1,5 @@
 '''
-    flip the keys and values from http://country.io/iso3.json
+    flip the keys and values from http://country.io/iso3.json, found in country_codes.txt
 '''
 
 import json

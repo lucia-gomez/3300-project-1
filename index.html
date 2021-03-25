@@ -188,6 +188,8 @@
       const gdpData = files[1];
       const countryCodes = files[2];
 
+      // get flag icons for these countries
+      // the source files use the ISO-2 country codes, but the dataset uses ISO-3
       const countries = ["USA", "SYC", "GBR", "ITA", "ISR", "HUN"];
       const countryCodesToFlags = {};
       countries.forEach(c => {
