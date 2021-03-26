@@ -41,7 +41,8 @@
     }
 
     .legend-row {
-      margin-top: 2px;
+      display: flex;
+      margin-top: 3px;
     }
   </style>
 </head>
@@ -209,9 +210,9 @@
       const commaFormatter = d3.format(",");
       const moneyFormat = function (d) {
         if (d >= Math.pow(10, 12)) {
-          return `$ ${d / Math.pow(10, 12)} T`;
+          return `$ ${d / Math.pow(10, 12)}T`;
         } else {
-          return `$ ${d / Math.pow(10, 9)} B`;
+          return `$ ${d / Math.pow(10, 9)}B`;
         }
       };
       const bottomAxis = d3.axisBottom(gdpScale).ticks(4).tickFormat(moneyFormat)
