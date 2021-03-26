@@ -24,7 +24,12 @@
 <body>
 
   <h3> Graph 1: Visualizing the percent of population vaccinated for countries of varying GDPs</h3>
-  <p> This graph explores how the GDP of a country impacts its vaccincation progress as a percent of total population. Several countires are highlighted with their flag to show a variation among countires with high and low GDPs. We want to see if high-GDP countries have a greater percentage of their populaiton vaccinated and if lower-GDP countires have a smaller percentage of their population vaccinated.  </p>
+  <p> This graph explores how the GDP of a country impacts its vaccincation progress as a percent of
+    total population. Several countires are highlighted with their flag to show a variation among
+    countires with high and low GDPs. We want to see if high-GDP countries have a greater percentage
+    of their populaiton vaccinated and if lower-GDP countires have a smaller percentage
+    of their population vaccinated. The lack of a clear trend is surprising, but also reassuring
+    in that there isn't a strong disparity between which countries are able to obtain vaccines. </p>
 
   <svg id="per100" height=600 width=800 style="border:2px solid black; margin:20px;"></svg>
 
@@ -157,7 +162,14 @@
         .call(horizontalGridlines);
 
       const commaFormatter = d3.format(",");
-      const bottomAxis = d3.axisBottom(gdpScale).ticks(4).tickFormat(d => "$" + commaFormatter(d));
+      const moneyFormat = function (d) {
+        if (d > Math.pow(10, 12)) {
+          return `$${d / Math.pow(10, 12)} T`;
+        } else {
+          return `$${d / Math.pow(10, 9)} B`;
+        }
+      };
+      const bottomAxis = d3.axisBottom(gdpScale).ticks(4).tickFormat(moneyFormat)
       ticks.append("g")
         .attr("class", "x axis")
         .attr("transform", `translate(${margins2.left}, ${chartHeight2 + margins2.top + 10})`)
