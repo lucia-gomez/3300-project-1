@@ -47,12 +47,17 @@
 
     const scatter = d3.select("svg#per100");
 
-    const margins2 = { "top": 30, "right": 50, "bottom": 60, "left": 60 };
+    const margins2 = { "top": 40, "right": 50, "bottom": 70, "left": 70 };
     const height2 = scatter.attr("height");
     const width2 = scatter.attr("width");
 
     const chartHeight2 = height2 - margins2.top - margins2.bottom;
     const chartWidth2 = width2 - margins2.left - margins2.right;
+
+    scatter.append("text").text('GDP').attr('x', chartWidth2 / 2 + 60).attr('y', chartHeight2 + 90).attr('class', 'titles').attr('text-anchor', 'middle');
+    scatter.append("text").text('Percentage of Population Vaccinated').attr('x', - chartHeight2 / 2 - 35).attr('y', 20).attr('transform', 'rotate(-90)').attr('class', 'titles').attr('text-anchor', 'middle');
+    scatter.append("text").text('Country GDP vs. Percentage of Population Vaccinated').attr('x', chartWidth2 / 2 + 60).attr('y', 15).attr('class', 'titles').attr('text-anchor', 'middle');
+
 
     let ticks = scatter.append("g").attr("id", "ticks2");
     let chartAreaScatter = scatter.append("g")
@@ -147,7 +152,7 @@
       console.log(gdpExtent)
 
       const vaxPercentExtent = d3.extent(recentData, d => d.people_vaccinated_per_hundred);
-      const vaxPercentScale = d3.scaleSymlog().domain(vaxPercentExtent).range([chartHeight2, 0]);
+      const vaxPercentScale = d3.scaleSymlog().domain([vaxPercentExtent[0], 70]).range([chartHeight2, 0]);
 
       const leftAxis = d3.axisLeft(vaxPercentScale);
       ticks.append("g")
