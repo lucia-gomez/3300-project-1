@@ -187,7 +187,7 @@
       // can't use d3.extent for GDP data since it's now stored in a dict/object
       const minGDP = Math.min(...Object.values(validCountryToGDP));
       const maxGDP = Math.max(...Object.values(validCountryToGDP));
-      const gdpExtent = [minGDP, maxGDP];
+      const gdpExtent = [minGDP, maxGDP + Math.pow(10, 13)];
       const gdpScale = d3.scaleLog().domain(gdpExtent).range([0, chartWidth2]);
       console.log(gdpExtent)
 
