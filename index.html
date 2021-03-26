@@ -5,6 +5,7 @@
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <style>
     html {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
       margin-left: 4em;
       margin-right: 4em;
       margin-top: 1em;
@@ -51,9 +52,7 @@
   <h3>Visualizing the percent of population vaccinated for countries of varying GDPs</h3>
   <p> This graph explores the correlation between a country's GDP and its vaccination progress.
     Several countries are highlighted with their flag to show a variation among
-    countries with high and low GDPs. We wanted to see if high-GDP countries have a greater percentage
-    of their population vaccinated and if lower-GDP countries have a smaller percentage
-    of their population vaccinated. The lack of a clear trend is surprising, but also reassuring
+    countries with high and low GDPs. The lack of a clear trend is surprising, but also reassuring
     in that there isn't a strong disparity between which countries are able to obtain vaccines. </p>
 
   <div id="container">
@@ -266,13 +265,12 @@
   <div>
 
     <h3>Visualizing the vaccination progress of selected countries from December 2020 to March 2021</h3>
-    <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs, and
-      Hungary and Israel have relatively lower GDPs, while Seychelles has the lowest GDP of the group. This linegraph
-      expands on their vaccination progress from December 13th, 2020 to March 7th, 2021 to show surprising trends in
-      vaccination progress over the last four months. As seen in the scatterplot, a high GDP does not neccessary
-      correlate with high vaccination progress.</p>
+    <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs,
+      Hungary and Israel have relatively lower GDPs, and Seychelles has the lowest GDP of the group. This line graph
+      expands on their vaccination progress to show surprising trends in vaccination progress over the last four months. 
+      As seen in the scatterplot, a high GDP does not necessarily correlate with high vaccination progress.</p>
 
-    <svg id="lineplot" width="800" height="500"></svg>
+    <svg id="lineplot" width="810" height="500"></svg>
 
     <script>
       // Scales and Axises
@@ -366,7 +364,7 @@
 
         svg.append("text").text('United States').attr('x', 750).attr('y', 310).attr('text-anchor', 'middle').attr('fill', colors[1]);
 
-        svg.append("text").text('Hungary').attr('x', 770).attr('y', 347).attr('text-anchor', 'middle').attr('fill', colors[5]);
+        svg.append("text").text('Hungary').attr('x', 770).attr('y', 350).attr('text-anchor', 'middle').attr('fill', colors[5]);
 
         svg.append("text").text('Italy').attr('x', 780).attr('y', 410).attr('text-anchor', 'middle').attr('fill', colors[3]);
 
