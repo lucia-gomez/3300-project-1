@@ -4,6 +4,12 @@
 <head>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <style>
+    html {
+      margin-left: 5em;
+      margin-right: 5em;
+      margin-top: 1em;
+    }
+
     .gridlines line {
       stroke: lightgrey;
     }
@@ -18,6 +24,9 @@
 
     svg {
       margin: 20px;
+      margin-left:auto;
+      margin-right:auto;
+      display:block;
     }
 
     #container {
@@ -41,10 +50,10 @@
 <body>
 
   <h3> Graph 1: Visualizing the percent of population vaccinated for countries of varying GDPs</h3>
-  <p> This graph explores how the GDP of a country impacts its vaccincation progress as a percent of
-    total population. Several countires are highlighted with their flag to show a variation among
-    countires with high and low GDPs. We want to see if high-GDP countries have a greater percentage
-    of their populaiton vaccinated and if lower-GDP countires have a smaller percentage
+  <p> This graph explores the correlation between a country's GDP and its vaccination progress.
+    Several countries are highlighted with their flag to show a variation among
+    countries with high and low GDPs. We wanted to see if high-GDP countries have a greater percentage
+    of their population vaccinated and if lower-GDP countries have a smaller percentage
     of their population vaccinated. The lack of a clear trend is surprising, but also reassuring
     in that there isn't a strong disparity between which countries are able to obtain vaccines. </p>
 
@@ -203,9 +212,9 @@
       const commaFormatter = d3.format(",");
       const moneyFormat = function (d) {
         if (d >= Math.pow(10, 12)) {
-          return `$${d / Math.pow(10, 12)} T`;
+          return `$ ${d / Math.pow(10, 12)} T`;
         } else {
-          return `$${d / Math.pow(10, 9)} B`;
+          return `$ ${d / Math.pow(10, 9)} B`;
         }
       };
       const bottomAxis = d3.axisBottom(gdpScale).ticks(4).tickFormat(moneyFormat)
@@ -258,12 +267,13 @@
   <div>
 
     <h3> Graph 2: Visualizing the vaccination progress of selected countries from December 2020 to March 2021</h3>
-    <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs,
-      Hungary and Israel have relatively lower GDPs, and Seychelles has a significantly lower GDP. This linegraph
+    <p> As visualized in the scatterplot above, the United States, United Kindgdom, and Italy all have high GDPs, and
+      Hungary and Israel have relatively lower GDPs, while Seychelles has the lowest GDP of the group. This linegraph
       expands on their vaccination progress from December 13th, 2020 to March 7th, 2021 to show surprising trends in
-      vaccination progress over the last four months among countries with high and low GDPs. </p>
+      vaccination progress over the last four months. As seen in the scatterplot, a high GDP does not neccessary
+      correlate with high vaccination progress.</p>
 
-    <svg id="lineplot" width="800" height="500" style="margin:20px;"></svg>
+    <svg id="lineplot" width="800" height="500"></svg>
 
     <script>
       // Scales and Axises
