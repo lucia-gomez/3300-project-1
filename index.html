@@ -17,8 +17,23 @@
     }
 
     svg {
-      border: 2px solid black;
       margin: 20px;
+    }
+
+    #container {
+      display: flex;
+    }
+
+    #legend {
+      margin-top: 60px;
+    }
+
+    #legend img {
+      margin-right: 5px;
+    }
+
+    .legend-row {
+      margin-top: 2px;
     }
   </style>
 </head>
@@ -33,8 +48,10 @@
     of their population vaccinated. The lack of a clear trend is surprising, but also reassuring
     in that there isn't a strong disparity between which countries are able to obtain vaccines. </p>
 
-  <svg id="per100" height=600 width=800></svg>
-
+  <div id="container">
+    <svg id="per100" height=600 width=800></svg>
+    <div id="legend"> </div>
+  </div>
   <script>
 
     // a list of all the keys used in the GDP dataset
@@ -64,6 +81,8 @@
       .attr("id", "chartAreaScatter")
       .attr("transform", "translate(" + margins2.left + "," + margins2.top + ")");
 
+    const legend = d3.select("#legend").attr("transform", `translate(${width2 - 240}, ${margins2.top})`);
+
     // load 2 files at once, and go to the .then function when they're both loaded
     Promise.all([
       d3.csv("country_vaccinations.csv"),
@@ -85,6 +104,19 @@
       const countryCodesToFlags = {};
       countries.forEach(c => {
         countryCodesToFlags[c] = `https://hatscripts.github.io/circle-flags/flags/${countryCodes[c].toLowerCase()}.svg`;
+      })
+
+      const countryNameToFlag = {};
+      vaxData.forEach(d => {
+        if (countries.includes(d.iso_code)) {
+          countryNameToFlag[d.country] = countryCodesToFlags[d.iso_code];
+        }
+      });
+      console.log(countryNameToFlag)
+      Object.entries(countryNameToFlag).forEach(d => {
+        const row = legend.append("div").attr("class", "legend-row");
+        row.append("img").attr("src", d[1]).attr("width", 15);
+        row.append("span").text(d[0]);
       })
 
       // clean vax data
