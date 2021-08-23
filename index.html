@@ -123,7 +123,6 @@
           countryNameToFlag[d.country] = countryCodesToFlags[d.iso_code];
         }
       });
-      console.log(countryNameToFlag)
       Object.entries(countryNameToFlag).forEach(d => {
         const row = legend.append("div").attr("class", "legend-row");
         row.append("img").attr("src", d[1]).attr("width", 15);
@@ -136,12 +135,10 @@
       });
 
       const dates = d3.extent(vaxData, d => d.date);
-      console.log("Oldest and most recent date", dates);
 
       // ignore countries that haven't been updated in a month
       const recentDates = vaxData.filter(d => d.date >= "2021-02-15");
       const countriesWithRecentDates = [... new Set(recentDates.map(d => d.country))];
-      console.log("Number of countries with recent data", countriesWithRecentDates.length);
 
       // get most recent vax data for each country, since there's data for each day
       let recentData = countriesWithRecentDates.map(country => {
@@ -192,7 +189,6 @@
       const maxGDP = Math.max(...Object.values(validCountryToGDP));
       const gdpExtent = [minGDP, maxGDP + Math.pow(10, 13)];
       const gdpScale = d3.scaleLog().domain(gdpExtent).range([0, chartWidth2]);
-      console.log(gdpExtent)
 
       const vaxPercentExtent = d3.extent(recentData, d => d.people_vaccinated_per_hundred);
       const vaxPercentScale = d3.scaleSymlog().domain([vaxPercentExtent[0], 70]).range([chartHeight2, 0]);
@@ -289,17 +285,11 @@
 
       d3.csv("country_vaccinations.csv", d3.autoType).then((data) => {
 
-        console.log("Country Vacination Data");
-        console.log(data);
-
         const dateExtent = d3.extent(data, d => d.date);
         const dateScale = d3.scaleTime().domain(dateExtent).range([0, chartWidth]);
 
         // const vaxExtent = d3.extent(data, d => d['total_vaccinations_per_hundred']);
         const vaxScale = d3.scaleLinear().domain([0, 75]).range([chartHeight, 0]);
-
-        console.log(dateExtent);
-        // console.log(vaxExtent);
 
         let vaxAxis = d3.axisLeft(vaxScale);
         let vaxGridlines = d3.axisLeft(vaxScale)
